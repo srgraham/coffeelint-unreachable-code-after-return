@@ -12,10 +12,12 @@ getIndentLength = (str)->
 module.exports = class UnreachableCodeAfterReturn
 
   rule:
-    name: 'unreachable code after return'
+    name: 'unreachable_code_after_return'
     level: 'error'
     message: 'Unreachable code after return'
-    description: ''
+    description: '''
+      Locates code that is unrunnable due to being proceeded by a return.
+    '''
 
   curr_return_indent: Infinity
 
