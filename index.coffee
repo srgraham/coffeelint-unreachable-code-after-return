@@ -3,7 +3,7 @@
 #  nodeName is 'Code' and node.body.isEmpty()
 
 getIndentLength = (str)->
-  out = 0
+  out = -1
   str.replace /^(\s*)[^#\s]/, (spaces)->
     out = spaces.length
     return
@@ -17,16 +17,24 @@ module.exports = class UnreachableCodeAfterReturn
     message: 'Unreachable code after return'
     description: ''
 
+  curr_return_indent: Infinity
+
   lintLine: (line, lineApi)->
     if lineApi.lineNumber is 0
       return null
-    
-    prev_line = lineApi.lines[lineApi.lineNumber - 1]
 
-    if /^\s*return/.test prev_line
-      prev_indent = getIndentLength prev_line
-      curr_indent = getIndentLength line
-      if prev_indent <= curr_indent
-        return true
+    curr_line_indent = getIndentLength line
+    
+#    prev_line = lineApi.lines[lineApi.lineNumber - 1]
+
+    if curr_line_indent isnt -1 and curr_line_indent < @curr_return_indent
+      @curr_return_indent = Infinity
+
+    if curr_line_indent >= @curr_return_indent
+      return true
+
+    if /^\s*return/.test line
+      @curr_return_indent = curr_line_indent
+    
     return false
 
