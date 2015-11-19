@@ -35,7 +35,7 @@ module.exports = class UnreachableCodeAfterReturn
     if curr_line_indent >= @curr_return_indent
       return true
 
-    if /^\s*return/.test line
+    if /^\s*return(?!\s*(if|unless))/.test line
       @curr_return_indent = curr_line_indent
     
     return false

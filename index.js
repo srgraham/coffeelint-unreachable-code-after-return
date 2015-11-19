@@ -18,7 +18,7 @@
       name: 'unreachable_code_after_return',
       level: 'error',
       message: 'Unreachable code after return',
-      description: ''
+      description: 'Locates code that is unrunnable due to being proceeded by a return.'
     };
 
     UnreachableCodeAfterReturn.prototype.curr_return_indent = Infinity;
@@ -35,7 +35,7 @@
       if (curr_line_indent >= this.curr_return_indent) {
         return true;
       }
-      if (/^\s*return/.test(line)) {
+      if (/^\s*return(?!\s*(if|unless))/.test(line)) {
         this.curr_return_indent = curr_line_indent;
       }
       return false;
